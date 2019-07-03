@@ -26,7 +26,9 @@ class Packer:
             if issubclass(resolved, cls):
                 return resolver(resolved, **kwargs)
 
-        return resolved.__unpacked__(**kwargs)
+        if hasattr(resolved, "__unpacked__"):
+            return resolved.__unpacked__(**kwargs)
+        return resolved(**kwargs)
 
     def unpack(self, packed: bytes, ext_resolvers: Optional[Dict[Any, Any]] = None) -> Any:
         return loads(packed, ext_handlers={

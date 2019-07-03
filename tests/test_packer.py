@@ -1,6 +1,7 @@
+from unittest.mock import sentinel
+
 import pytest
 from pytest import raises
-from unittest.mock import sentinel
 
 from packed import Packer, Resolver
 
@@ -62,11 +63,6 @@ def test_unpack(*, resolver, packer):
         class CustomClass:
             def __packed__(self):
                 return {}
-
-            @classmethod
-            def __unpacked__(cls, **kwargs):
-                return cls(**kwargs)
-
         resolver.register(CustomClass)
         packed = packer.pack(CustomClass())
 
@@ -86,36 +82,17 @@ def test_unpack_with_ext_resolvers(*, resolver, packer):
             def __packed__(self):
                 return {}
 
-            @classmethod
-            def __unpacked__(cls, **kwargs):
-                return cls(**kwargs)
-
         resolver.register(CustomClass)
         packed = packer.pack(CustomClass(injected=sentinel.injected))
 
         def resolver(cls, **kwargs):
-            return cls.__unpacked__(**kwargs, injected=sentinel.injected)
+            return cls(**kwargs, injected=sentinel.injected)
 
     with when:
         actual = packer.unpack(packed, {CustomClass: resolver})
 
     with then:
         assert isinstance(actual, CustomClass)
-
-
-def test_unpack_without_unpacked_method(*, resolver, packer):
-    with given:
-        class CustomClass:
-            def __packed__(self):
-                return {}
-        resolver.register(CustomClass)
-        packed = packer.pack(CustomClass())
-
-    with when, raises(Exception) as exception:
-        packer.unpack(packed)
-
-    with then:
-        assert exception.type is AttributeError
 
 
 @pytest.mark.parametrize("value", [
@@ -125,6 +102,7 @@ def test_unpack_without_unpacked_method(*, resolver, packer):
     "banana",
     [],
     {},
+    b"101010",
 ])
 def test_unpack_native_types(value, *, packer):
     with given:
