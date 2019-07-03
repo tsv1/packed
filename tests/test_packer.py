@@ -1,0 +1,137 @@
+import pytest
+from pytest import raises
+from unittest.mock import sentinel
+
+from packed import Packer, Resolver
+
+from ._test_utils.steps import given, then, when
+
+
+@pytest.fixture
+def resolver():
+    return Resolver()
+
+
+@pytest.fixture
+def packer(resolver):
+    return Packer(resolver)
+
+
+def test_pack(*, resolver, packer):
+    with given:
+        class CustomClass:
+            def __packed__(self):
+                return {}
+        resolver.register(CustomClass)
+
+    with when:
+        actual = packer.pack(CustomClass())
+
+    with then:
+        assert isinstance(actual, bytes)
+
+
+def test_pack_unregistered(*, resolver, packer):
+    with given:
+        class CustomClass:
+            def __packed__(self):
+                return {}
+
+    with when, raises(Exception) as exception:
+        packer.pack(CustomClass())
+
+    with then:
+        assert exception.type is KeyError
+
+
+def test_pack_without_packed_method(*, resolver, packer):
+    with given:
+        class CustomClass:
+            pass
+        resolver.register(CustomClass)
+
+    with when, raises(Exception) as exception:
+        packer.pack(CustomClass())
+
+    with then:
+        assert exception.type is AttributeError
+
+
+def test_unpack(*, resolver, packer):
+    with given:
+        class CustomClass:
+            def __packed__(self):
+                return {}
+
+            @classmethod
+            def __unpacked__(cls, **kwargs):
+                return cls(**kwargs)
+
+        resolver.register(CustomClass)
+        packed = packer.pack(CustomClass())
+
+    with when:
+        actual = packer.unpack(packed)
+
+    with then:
+        assert isinstance(actual, CustomClass)
+
+
+def test_unpack_with_ext_resolvers(*, resolver, packer):
+    with given:
+        class CustomClass:
+            def __init__(self, *, injected):
+                self._injected = injected
+
+            def __packed__(self):
+                return {}
+
+            @classmethod
+            def __unpacked__(cls, **kwargs):
+                return cls(**kwargs)
+
+        resolver.register(CustomClass)
+        packed = packer.pack(CustomClass(injected=sentinel.injected))
+
+        def resolver(cls, **kwargs):
+            return cls.__unpacked__(**kwargs, injected=sentinel.injected)
+
+    with when:
+        actual = packer.unpack(packed, {CustomClass: resolver})
+
+    with then:
+        assert isinstance(actual, CustomClass)
+
+
+def test_unpack_without_unpacked_method(*, resolver, packer):
+    with given:
+        class CustomClass:
+            def __packed__(self):
+                return {}
+        resolver.register(CustomClass)
+        packed = packer.pack(CustomClass())
+
+    with when, raises(Exception) as exception:
+        packer.unpack(packed)
+
+    with then:
+        assert exception.type is AttributeError
+
+
+@pytest.mark.parametrize("value", [
+    None,
+    3.14,
+    42,
+    "banana",
+    [],
+    {},
+])
+def test_unpack_native_types(value, *, packer):
+    with given:
+        packed = packer.pack(value)
+
+    with when:
+        actual = packer.unpack(packed)
+
+    with then:
+        assert actual == value

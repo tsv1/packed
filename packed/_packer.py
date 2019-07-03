@@ -28,7 +28,7 @@ class Packer:
 
         return resolved.__unpacked__(**kwargs)
 
-    def unpack(self, packed: bytes, ext_resolvers: Optional[Dict[Any, Any]]) -> Any:
+    def unpack(self, packed: bytes, ext_resolvers: Optional[Dict[Any, Any]] = None) -> Any:
         return loads(packed, ext_handlers={
             0x42: lambda x: self._unpack(x.data, ext_resolvers or {}),
         })

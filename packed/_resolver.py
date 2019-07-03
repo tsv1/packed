@@ -13,6 +13,8 @@ class Resolver:
     def register(self, cls: AnyClass, name: Optional[str] = None) -> None:
         if name is None:
             name = cls.__name__
+        if name in self._registry:
+            raise KeyError(name)
         self._registry[name] = cls
 
     def resolve_type(self, name: str) -> AnyClass:
