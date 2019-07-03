@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import Any, Dict, Optional, Type
 
 __all__ = ("Resolver",)
@@ -8,7 +9,7 @@ AnyClass = Type[Any]
 
 class Resolver:
     def __init__(self) -> None:
-        self._registry: Dict[str, AnyClass] = {}
+        self._registry: Dict[str, AnyClass] = OrderedDict()
 
     def register(self, cls: AnyClass, name: Optional[str] = None) -> None:
         if name is None:

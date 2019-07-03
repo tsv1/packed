@@ -116,11 +116,14 @@ def test_resolve_custom_name(*, resolver):
 
 def test_resolve_name_without_register(*, resolver):
     with given:
-        class CustomClass:
+        class ParentClass:
+            pass
+
+        class ChildClass(ParentClass):
             pass
 
     with when, raises(Exception) as exception:
-        resolver.resolve_name(CustomClass)
+        resolver.resolve_name(ChildClass)
 
     with then:
         assert exception.type is KeyError

@@ -32,6 +32,24 @@ def test_pack(*, resolver, packer):
         assert isinstance(actual, bytes)
 
 
+def test_pack_inherited(*, resolver, packer):
+    with given:
+        class ParentClass:
+            def __packed__(self):
+                return {}
+
+        class ChildClass(ParentClass):
+            pass
+
+        resolver.register(ChildClass)
+
+    with when:
+        actual = packer.pack(ChildClass())
+
+    with then:
+        assert isinstance(actual, bytes)
+
+
 def test_pack_unregistered(*, resolver, packer):
     with given:
         class CustomClass:
@@ -73,7 +91,7 @@ def test_unpack(*, resolver, packer):
         assert isinstance(actual, CustomClass)
 
 
-def test_unpack_with_ext_resolvers(*, resolver, packer):
+def test_unpack_with_ext_resolver(*, resolver, packer):
     with given:
         class CustomClass:
             def __init__(self, *, injected):
@@ -89,10 +107,35 @@ def test_unpack_with_ext_resolvers(*, resolver, packer):
             return cls(**kwargs, injected=sentinel.injected)
 
     with when:
-        actual = packer.unpack(packed, {CustomClass: resolver})
+        actual = packer.unpack(packed, {type(sentinel): None, CustomClass: resolver})
 
     with then:
         assert isinstance(actual, CustomClass)
+
+
+def test_unpack_with_ext_resolvers(*, resolver, packer):
+    with given:
+        class ParentClass:
+            pass
+
+        class ChildClass(ParentClass):
+            def __init__(self, *, injected):
+                self._injected = injected
+
+            def __packed__(self):
+                return {}
+
+        resolver.register(ChildClass)
+        packed = packer.pack(ChildClass(injected=sentinel.injected))
+
+        def resolver(cls, **kwargs):
+            return cls(**kwargs, injected=sentinel.injected)
+
+    with when:
+        actual = packer.unpack(packed, {ParentClass: resolver})
+
+    with then:
+        assert isinstance(actual, ChildClass)
 
 
 @pytest.mark.parametrize("value", [
