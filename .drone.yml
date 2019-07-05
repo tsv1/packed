@@ -55,8 +55,26 @@ steps:
 - name: test
   image: python:3.7
   commands:
-  - make install
-  - make test
+  - make install lint test
+
+trigger:
+  event:
+  - push
+  - tag
+
+---
+kind: pipeline
+name: python3.5
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: test
+  image: python:3.5.3
+  commands:
+  - make install lint test
 
 trigger:
   event:
@@ -104,6 +122,7 @@ trigger:
   - success
 
 depends_on:
+- python3.5
 - python3.6
 - python3.7
 
