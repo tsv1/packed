@@ -1,6 +1,6 @@
 .PHONY: install
 install:
-	pip3 install -r requirements.txt -r requirements-dev.txt
+	pip3 install --quiet -r requirements.txt -r requirements-dev.txt
 
 .PHONY: build
 build:
@@ -21,14 +21,22 @@ check-types:
 
 .PHONY: check-imports
 check-imports:
-	python3 -m isort --recursive --check-only
+	python3 -m isort packed tests --recursive --check-only
 
 .PHONY: check-style
 check-style:
-	python3 -m flake8
+	python3 -m flake8 packed tests
 
 .PHONY: lint
 lint: check-types check-style check-imports
 
 .PHONY: all
 all: install lint test
+
+.PHONY: test-in-docker
+test-in-docker:
+	docker run -v `pwd`:/tmp -w /tmp python:$(or $(PYTHON_VERSION),3.6) make install test
+
+.PHONY: all-in-docker
+all-in-docker:
+	docker run -v `pwd`:/tmp -w /tmp python:$(or $(PYTHON_VERSION),3.6) make all
