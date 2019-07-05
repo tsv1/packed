@@ -12,8 +12,7 @@ test:
 
 .PHONY: coverage
 coverage:
-	python3 -m pytest --cov --cov-report=term \
-							--cov-report=xml:$(or $(COV_REPORT_DEST),coverage.xml)
+	python3 -m pytest --cov --cov-report=term --cov-report=xml:$(or $(COV_REPORT_DEST),coverage.xml)
 
 .PHONY: check-types
 check-types:

@@ -104,6 +104,9 @@ sdist/
 var/
 wheels/
 pip-wheel-metadata/
+pip-install-*/
+pip-build-*/
+pip-*-unpack/
 share/python-wheels/
 *.egg-info/
 .installed.cfg

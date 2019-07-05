@@ -4,7 +4,7 @@ from ._packable import Packable
 from ._packer import Packer
 from ._resolver import Resolver
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __all__ = ("pack", "unpack", "packable",)
 
 

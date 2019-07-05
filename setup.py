@@ -13,13 +13,13 @@ def find_dev_required():
 
 setup(
     name="packed",
-    version="0.1.0",
+    version="0.1.1",
     description="",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Nikita Tsvetkov",
     author_email="nikitanovosibirsk@yandex.com",
-    python_requires=">=3.6.0",
+    python_requires=">=3.5.3",
     url="https://github.com/nikitanovosibirsk/packed",
     license="Apache 2",
     packages=find_packages(exclude=("tests",)),
@@ -28,6 +28,7 @@ setup(
     tests_require=find_dev_required(),
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
