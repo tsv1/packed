@@ -10,18 +10,14 @@ steps:
 - name: lint
   image: python:3.6
   commands:
-  - python3 setup.py install
-  - pip3 install -r requirements-dev.txt
-  - python3 -m mypy packed --strict
-  - python3 -m flake8
-  - python3 -m isort --check-only
+  - make install
+  - make lint
 
 - name: test
   image: python:3.6
   commands:
-  - python3 setup.py install
-  - pip3 install -r requirements-dev.txt
-  - python3 -m pytest --cov=packed --cov-report=xml:/tmp/artifacts/coverage.xml
+  - make install
+  - COV_REPORT_DEST=/tmp/artifacts/coverage.xml make coverage
   volumes:
   - name: artifacts
     path: /tmp/artifacts
@@ -59,9 +55,8 @@ steps:
 - name: test
   image: python:3.7
   commands:
-  - python3 setup.py install
-  - pip3 install -r requirements-dev.txt
-  - python3 -m pytest
+  - make install
+  - make test
 
 trigger:
   event:
@@ -80,7 +75,7 @@ steps:
 - name: build
   image: python:3.6
   commands:
-  - python3 setup.py sdist bdist_wheel
+  - make build
   volumes:
   - name: artifacts
     path: /tmp/artifacts
