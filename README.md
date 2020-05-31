@@ -1,10 +1,9 @@
 # packed
 
-[![License](https://img.shields.io/github/license/nikitanovosibirsk/packed.svg)](https://github.com/nikitanovosibirsk/packed)
-[![Drone](https://cloud.drone.io/api/badges/nikitanovosibirsk/packed/status.svg)](https://cloud.drone.io/nikitanovosibirsk/packed)
-[![Codecov](https://img.shields.io/codecov/c/github/nikitanovosibirsk/packed/master.svg)](https://codecov.io/gh/nikitanovosibirsk/packed)
-[![PyPI](https://img.shields.io/pypi/v/packed.svg)](https://pypi.python.org/pypi/packed/)
-[![Python Version](https://img.shields.io/pypi/pyversions/packed.svg)](https://pypi.python.org/pypi/packed/)
+[![Codecov](https://img.shields.io/codecov/c/github/nikitanovosibirsk/packed/master.svg?style=flat-square)](https://codecov.io/gh/nikitanovosibirsk/packed)
+[![PyPI](https://img.shields.io/pypi/v/packed.svg?style=flat-square)](https://pypi.python.org/pypi/packed/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/packed?style=flat-square)](https://pypi.python.org/pypi/packed/)
+[![Python Version](https://img.shields.io/pypi/pyversions/packed.svg?style=flat-square)](https://pypi.python.org/pypi/packed/)
 
 ## Installation
 
