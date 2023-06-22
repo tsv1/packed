@@ -1,4 +1,4 @@
-from typing import Any, Union, cast
+from typing import Any, Union
 
 from ._resolver import AnyClass, Resolver
 
@@ -15,7 +15,7 @@ class Packable:
             return cls_or_name
 
         def wrapped(cls: AnyClass) -> AnyClass:
-            self._resolver.register(cls=cls, name=cast(str, cls_or_name))
+            self._resolver.register(cls=cls, name=cls_or_name)
             return cls
 
         return wrapped
