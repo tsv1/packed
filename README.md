@@ -1,5 +1,10 @@
 # packed
 
+[![Codecov](https://img.shields.io/codecov/c/github/tsv1/packed/master.svg?style=flat-square)](https://codecov.io/gh/tsv1/packed)
+[![PyPI](https://img.shields.io/pypi/v/packed.svg?style=flat-square)](https://pypi.python.org/pypi/packed/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/packed?style=flat-square)](https://pypi.python.org/pypi/packed/)
+[![Python Version](https://img.shields.io/pypi/pyversions/packed.svg?style=flat-square)](https://pypi.python.org/pypi/packed/)
+
 **packed** is a Python library that provides a simple way to serialize (pack) and deserialize (unpack) custom Python objects, leveraging the efficient [MessagePack](https://msgpack.org/) binary serialization format. It's designed to help you easily transmit objects over networks, save them to files, or perform any operation that requires converting objects to bytes and back.
 
 ## Features
