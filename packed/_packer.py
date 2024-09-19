@@ -19,7 +19,8 @@ class Packer:
         """
         Initialize the `Packer` with the given resolver.
 
-        :param resolver: The resolver used to register and look up classes for packing and unpacking.
+        :param resolver: The resolver used to register and look up classes for packing
+                         and unpacking.
         """
         self._resolver = resolver
 
